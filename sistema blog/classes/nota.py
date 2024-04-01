@@ -1,6 +1,6 @@
 from datetime import datetime 
-from comentario import Comentario
-from sistema import Sistema
+from comentario import *
+#from sistema import Sistema
 from typing import List
 
 class Nota:

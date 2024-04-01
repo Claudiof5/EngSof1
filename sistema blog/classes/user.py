@@ -1,5 +1,5 @@
-from sistema import Sistema
-from typing import List
+#from sistema import Sistema
+from typing import List, Dict
 
 class User:
     
@@ -21,3 +21,12 @@ class User:
     def createComentario(self, noteId, texto):
         comentarioId = Sistema.createComentario(self.userId, noteId, texto)
         self.comentariosCriados.append(comentarioId)
+
+    def deleteNota(self, noteId):
+        Sistema.deleteNota(self.userId, noteId)
+        self.notasCriadas.delete(noteId)
+
+    def printAllBlogsCriados(self):
+        for blog in self.blogsCriados:
+            blg = Sistema.getBlogById(blog)
+            print(f"id: {blog:<20}titulo: {blg.titulo}")

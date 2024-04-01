@@ -1,5 +1,4 @@
 from datetime import datetime 
-from typing import List
 
 
 class Comentario:
@@ -8,5 +7,5 @@ class Comentario:
         self.texto        : str = texto
         self.dataCriacao  : str = datetime.now().strftime("%x")
         self.comentarioId : str = comentarioId
-    
+
     

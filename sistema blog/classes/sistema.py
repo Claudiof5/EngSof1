@@ -1,7 +1,5 @@
 from user import User
-from blog import Blog
-from nota import Nota
-from comentario import Comentario
+from blog import *
 from typing import List
 
 class Sistema:
@@ -21,6 +19,15 @@ class Sistema:
         blog = Sistema.getBlogById(blogId)
         notaId = blog.createNota( userId, titulo, texto)
         return notaId
+
+    @staticmethod
+    def deleteNota( userId : str, noteId : str):
+        listId = noteId.split("-")
+        blogId = listId[0] + "-" + listId[1]
+        blog = Sistema.getBlogById(blogId)
+        blog.deletaNota(userId, noteId)
+
+
 
     @staticmethod
     def createComentario( userId : str, noteId : str, texto : str ) -> Comentario:
@@ -77,11 +84,17 @@ class Sistema:
         comentario = nota.getComentarioById(comentarioId)
         return comentario
         
-    
+    @staticmethod
+    def getUserByEmail( userEmail : str) -> User:
+        for user in Sistema.users:
+            if user.email == userEmail:
+                return user
 
-
+    def printAllBlogs() -> None:
+        for blog in Sistema.blogs:
+            print(f"id: {blog.blogId:<20}titulo: {blog.titulo}")
 if __name__ =="__main__":
-    Sistema.createBlog("1","1", "macaco")
+    Sistema.createBlog("1", "macaco")
 
-    blog = Sistema.getBlogById('1-1')
+    blog = Sistema.getBlogById('1-0')
     print(blog.titulo)
