@@ -1,8 +1,8 @@
 #from sistema import Sistema
-from typing import List, Dict
+        from typing import List
+        from .sistema import Sistema
 
 class User:
-    
     def __init__(self, email: str, userId : str) -> None:
         self.email              : str = email
         self.userId             : str = userId

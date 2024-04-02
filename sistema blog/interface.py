@@ -1,4 +1,4 @@
-from classes.sistema import*
+from classes import *
 import sys
 
 
@@ -14,16 +14,17 @@ def login():
         email = input("insira email")
         userId = Sistema.getUserByEmail(email)
 
-        return userId
+        opcoesUsuario( userId)
     
     elif chave == "2":
         userId = None
         email = None
-        while( not userId or email != "0"):
-            email = input("insira um email não cadastrado para criar sua conta ou escreva 0")
+        while( not userId ):
+            email = input("insira um email não cadastrado para criar sua conta ou escreva 0 para sair: ")
             userId = Sistema.createUser(email)
-
-        return userId
+            if email == "0":
+                break
+        opcoesUsuario( userId)
     elif chave == 3:
         sys.exit()
 
@@ -83,4 +84,7 @@ def verBlogs(user):
 def acessarBlog(blogId):
     pass
 
-sistema = Sistema()
+
+
+
+userId = login()

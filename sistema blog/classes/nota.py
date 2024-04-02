@@ -1,5 +1,5 @@
 from datetime import datetime 
-from comentario import *
+from .comentario import Comentario
 #from sistema import Sistema
 from typing import List
 
@@ -16,8 +16,6 @@ class Nota:
         novoComentario = Comentario(userId, texto, self.noteId + "-" + str(len(self.comentarios)))
         self.comentarios.append(novoComentario)
 
-        usuario = Sistema.getUserById(userId)
-        usuario.comentariosCriados.append(novoComentario.comentarioId)
 
     def getComentarioById(self, comentarioId : str) -> Comentario:
         for comentario in self.comentarios:

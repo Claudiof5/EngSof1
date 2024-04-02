@@ -1,6 +1,7 @@
 from datetime import datetime 
 from typing import List
-from nota import *
+from .nota import Nota
+from .sistema import Sistema
 
 class Blog:
     def __init__(self, titulo: str, donoId:str, blogId: str) -> None:
