@@ -39,10 +39,9 @@ class Blog:
     def printAllNotas(self) -> bool:
         if len(self.notes) > 0:
             for nota in self.notes:
-                print(f"id da nota: {nota.noteId}".center(80))
-                print(f"~~-=-{nota.titulo}-=-~~".center(80))
-                print(f" {nota.texto}".center(80))
+                nota.printNota()
             return True
         else:
             print("Sem Notas nesse blog")
             return False
+        

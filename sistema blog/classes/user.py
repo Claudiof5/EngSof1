@@ -36,3 +36,5 @@ class User:
         else:
             print("Sem blogs criados")
             return False
+        
+        

@@ -21,3 +21,13 @@ class Nota:
         for comentario in self.comentarios:
             if comentario.comentarioId == comentarioId:
                 return comentario
+            
+    def printNota(self):
+        print(f"id da nota: {self.noteId}".center(80))
+        print(f"~~-=-{self.titulo}-=-~~".center(80))
+        print(f" {self.texto}".center(80))
+    
+    def checaNotaAFundo(self):
+        self.printNota()    
+        for comentario in self.comentarios:
+            comentario.printaComentario()

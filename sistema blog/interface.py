@@ -1,43 +1,50 @@
 from classes import Sistema, Blog, Nota, Comentario
 from classes.sistema import User
-import sys
+from os import system
 
 
 def login():
-    while(True):
+    system("clear")
+    while(True):    
         chave = input("""Escolha um para continuar
 1- Logar
 2- Criar conta
-3- Sair\n
-                    
-        """)
-        userId = None
+3- Sair
+ """)
         if chave == "1":
+            system("clear")
+            print("Efetuando Login")
             email = input("insira email: ")
-            userId = Sistema.getUserByEmail(email)
-            if userId:
-                opcoesUsuario( userId)
+            user = Sistema.getUserByEmail(email)
+            if isinstance(user, User):
+                opcoesUsuario( user)
             else:
+                system("clear")
                 print("email invalido")
         elif chave == "2":
             userId = None
-            email = None
-            
-            
-            email = input("insira um email não cadastrado para criar sua conta ou escreva 0 para sair: ")
-            
-            userId = Sistema.createUser(email)
-            
-            if email == "0":
-                break
-            opcoesUsuario( userId)
+            while True:
+                system("clear")
+                print("Efetuando Cadastro")
+                email = input("insira um email não cadastrado para criar sua conta ou escreva 0 para sair: ")
+                
+                userId = Sistema.createUser(email)
+                user = Sistema.getUserById(userId)
+                if email == "0":
+                    break
+                if isinstance(user, User):
+                    opcoesUsuario( user)
+                    break
+                
+                
         elif chave == 3:
             break
             
 
-def opcoesUsuario( userId):
-    user : User = Sistema.getUserById(userId)
+def opcoesUsuario( user: User):
     while True:
+        system("clear")
+        print(f"Logado como {user.email}\n")
         chave = input("""Escolha um para continuar
 1-Checar blogs existentes
 2-Criar blogs
@@ -57,6 +64,8 @@ def opcoesUsuario( userId):
 
 
 def administrarBlog( user: User ):
+    system("clear")
+    print(f"Logado como {user.email}")
     existeBlog = user.printAllBlogsCriados()
     if existeBlog:
         blogId = input("digite o id do blog que você quer administrar ou 0 para sair: ")
@@ -85,8 +94,10 @@ def administrarBlog( user: User ):
             return False
     
         
-def verBlogs(user):
-        
+def verBlogs(user: User):
+    system("clear")
+    print(f"Logado como {user.email}")
+
     while True:
         print("\nLista de blogs")
         Sistema.printAllBlogs()
@@ -99,11 +110,42 @@ def verBlogs(user):
             acessarBlog(user,blogId)
         if chave == "2":
             break
-def acessarBlog(user, blogId):
+def acessarBlog(user, blogId : str):
     blog = Sistema.getBlogById(blogId)
-    blog.printAllNotas()
-    chave = input("1-Ver comentarios de nota")
+    while True:
+        blog.printAllNotas()
+        chave = input("""
+    1-Ver comentarios de nota
+    2-Voltar
+    """)
+        if chave == "1":
+            while True:
+                noteId = input("Insira o id da Nota valido que você quer ver a fundo ou 0 para sair: ")    
+                nota = Sistema.getNoteById(noteId)
+                notaExiste = nota in blog.notes
+                if noteId == "0":
+                    break
+                if (notaExiste):
+                    verNota(user, nota)
+                    break
+        elif chave == "2":
+            break
 
+def verNota(user : User ,nota: Nota ):
+    system("clear")
+    print(f"Logado como {user.email}")
 
+    while True:
+        nota.checaNotaAFundo()
+
+        chave = input("""
+    1-Comentar
+    2-Voltar
+    """)
+        if chave == "1":
+            comentario = input("Insira seu comentario aqui: ")
+            user.createComentario(nota.noteId, comentario)
+        if chave == "2":
+            break
 
 userId = login()

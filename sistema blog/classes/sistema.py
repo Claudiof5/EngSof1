@@ -123,15 +123,21 @@ class Sistema:
         return comentario
         
     @classmethod    
-    def getUserByEmail( cls, userEmail : str) -> User:
+    def getUserByEmail( cls, userEmail : str):
         for user in cls.users:
             if user.email == userEmail:
                 return user
+        return None
     @classmethod    
     def printAllBlogs( cls ) -> None:
         for blog in cls.blogs:
             print(f"id: {blog.blogId:<20}titulo: {blog.titulo}")
-
+    @classmethod
+    def userInSistema( userId):
+        for user in Sistema.users:
+            if user.userId == userId:
+                return True
+        return False
 if __name__ =="__main__":
     Sistema.createBlog("1", "macaco")
 
