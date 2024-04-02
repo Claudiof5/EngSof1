@@ -1,7 +1,6 @@
 from datetime import datetime 
 from typing import List
 from .nota import Nota
-from .sistema import Sistema
 
 class Blog:
     def __init__(self, titulo: str, donoId:str, blogId: str) -> None:
@@ -36,4 +35,14 @@ class Blog:
         for note in self.notes:
             if note.noteId == noteId:
                 return note
-            
+    
+    def printAllNotas(self) -> bool:
+        if len(self.notes) > 0:
+            for nota in self.notes:
+                print(f"id da nota: {nota.noteId}".center(80))
+                print(f"~~-=-{nota.titulo}-=-~~".center(80))
+                print(f" {nota.texto}".center(80))
+            return True
+        else:
+            print("Sem Notas nesse blog")
+            return False
