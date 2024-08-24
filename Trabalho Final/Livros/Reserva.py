@@ -17,5 +17,3 @@ class Reserva:
     def get_codigoIdentificador_livro(self) -> str:
         return self.livro.codigoIdentificador
     
-    def print_reserva(self) -> None:
-        print(f"Livro: {self.livro.titulo} Data: {self.dataReserva}")

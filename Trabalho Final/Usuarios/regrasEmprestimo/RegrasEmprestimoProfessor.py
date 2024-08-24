@@ -8,12 +8,11 @@ class RegrasEmprestimoProfessor(iRegrasEmprestimo):
         semExemplaresDisponiveis = numeroExemplaresDisponiveis == 0
 
         condicionais = [ 
-            { "condicao": semExemplaresDisponiveis,             "mensagem": Interface.Erro_livro_indisponivel},
-            { "condicao": user.esta_em_debito(),                "mensagem": Interface.Erro_usuario_em_debito},
+            { "condicao": semExemplaresDisponiveis,             "erro": AssertionError(f"O livro {livro.titulo} não possui exemplares disponíveis") },
+            { "condicao": user.esta_em_debito(),                "erro": AssertionError(f"O usuário {user.nome} está em débito") },
                         ]
         
         for condicional in condicionais:
             if condicional["condicao"]:
-                condicional["mensagem"]()
-                return False
+                raise condicional["erro"]
         return True

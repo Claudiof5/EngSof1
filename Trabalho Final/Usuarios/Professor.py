@@ -22,10 +22,12 @@ class Professor(iUsuario):
         return self._observerProfessor.numero_notificacoes
 
     
-    def print_informacoes(self) -> None:
+    def retorna_informacoes(self) -> None:
         
-        self.print_numero_de_notificacoes()
-        super().print_informacoes()
+        retorno = super().retorna_informacoes()
+        retorno["numero_notificacoes"] = self.numero_de_notificacoes
+        return retorno
 
-    def print_numero_de_notificacoes(self) -> None:
-        print(f"Numero de notificações: {self.numero_de_notificacoes}")
+    def retorna_numero_de_notificacoes(self) -> None:
+        retorno = {"numero_notificacoes": self.numero_de_notificacoes, "nome": self.nome}
+        return retorno

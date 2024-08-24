@@ -22,13 +22,6 @@ class Emprestimo:
     @property
     def codigoExemplar(self) -> int:
         return self.exemplar.codigoExemplar
-
-    def print_emprestimo(self) -> None:
-        if self.emCurso:
-            if datetime.now().date() > self.dataDeDevolucaoEsperada:
-                status = "Em Atraso"
-            else:
-                status = "Em Curso"
-            print(f"\t-Livro: {self.exemplar.get_livro().titulo} \n\tData de Emprestimo: {self.dataEmprestimo} Data de Devolução Esperada: {self.dataDeDevolucaoEsperada}\n\tStatus: {status}\n")
-        else:
-            print(f"\t-Livro: {self.exemplar.get_livro().titulo} \n\tData de Emprestimo: {self.dataEmprestimo} Data de Devolução: {self.dataDeDevolucao}\n\tStatus: Finalizado")
+    @property
+    def titulo(self) -> str:
+        return self.exemplar.get_livro().titulo

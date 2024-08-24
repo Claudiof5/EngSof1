@@ -13,15 +13,14 @@ class RegrasEmprestimoAlunoPosGraduacao(iRegrasEmprestimo):
 
 
         condicionais = [ 
-            { "condicao": semExemplaresDisponiveis,             "mensagem": Interface.Erro_livro_indisponivel},
-            { "condicao": user.esta_em_debito(),                "mensagem": Interface.Erro_usuario_em_debito},
-            { "condicao": user.limite_de_livros_alcancado(),    "mensagem": Interface.Erro_limite_de_livros_alcancado},
-            { "condicao": semExemplaresSuficientesParaReservas, "mensagem": Interface.Erro_reserva_excedida},
-            { "condicao": existeEmprestimoAtivoDoLivro,         "mensagem": Interface.Erro_emprestimo_ativo}
+            { "condicao": semExemplaresDisponiveis,             "erro": AssertionError(f"O livro {livro.titulo} não possui exemplares disponíveis") },
+            { "condicao": user.esta_em_debito(),                "erro": AssertionError(f"O usuário {user.nome} está em débito") },
+            { "condicao": user.limite_de_livros_alcancado(),    "erro": AssertionError(f"O usuário {user.nome} atingiu o limite de emprestimos") },
+            { "condicao": semExemplaresSuficientesParaReservas, "erro": AssertionError(f"O livro {livro.titulo} não possui exemplares suficientes para suprir as reservas e o usuário {user.nome} não possui reserva") },
+            { "condicao": existeEmprestimoAtivoDoLivro,         "erro": AssertionError(f"O usuário {user.nome} já possui exemplar emprestado deste livro") },
                         ]
         
         for condicional in condicionais:
             if condicional["condicao"]:
-                condicional["mensagem"]()
-                return False
+                raise condicional["erro"]
         return True

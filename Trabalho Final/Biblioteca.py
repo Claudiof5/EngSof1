@@ -26,13 +26,14 @@ class Biblioteca:
     
 #Encontra Usuários e Livros
 
-    def find_user(self, codigoIdentificador: int) -> iUsuario:
+    def find_user(self, codigoIdentificador: str) -> iUsuario:
+        
         for usuario in self._usuarios:
             if usuario.codigoIdentificador == codigoIdentificador:
                 return usuario
         return None
     
-    def find_book(self, codigoIdentificador: int) -> Livro:
+    def find_book(self, codigoIdentificador: str) -> Livro:
         for livro in self._livros:
             if livro.codigoIdentificador == codigoIdentificador:
                 return livro
@@ -44,39 +45,39 @@ class Biblioteca:
     def retorna_informacoes_usuarios(self, codigoUsuario: int):
         usuario = self.find_user(codigoUsuario)
         if usuario:
-            usuario.print_informacoes()
+            return usuario.retorna_informacoes()
         else:
             print(self._usuarios[0].codigoIdentificador)
-            Interface.usuario_nao_encontrado()
+            raise ValueError(f'Usuário correspondente ao codigo {codigoUsuario} não encontrado')
     
     def retorna_informacoes_livro(self, codigoLivro: int):
         livro = self.find_book(codigoLivro)
         if livro:
-            livro.retorna_informacoes()
+            return livro.retorna_informacoes()
         else:
-            Interface.livro_nao_encontrado()
+            raise ValueError(f'Livro correspondente ao codigo {codigoLivro} não encontrado')
 
     def retorna_informacoes_notificacoes_professor(self, codigoUsuario: int):
         usuario: None | Professor = self.find_user(codigoUsuario)
         if usuario:
-            usuario.print_numero_de_notificacoes()
+            return usuario.retorna_numero_de_notificacoes()
         else:
-            Interface.usuario_nao_encontrado()
+            raise ValueError(f'Usuário correspondente ao codigo {codigoUsuario} não encontrado')
 
 #Cadastros livro, exemplar e usuario
 
-    def cadastrar_livro(self, codigoIdentificador: int, titulo: str, autores: str, editora: str, edicao: str, ano: str):
+    def cadastrar_livro(self, codigoIdentificador: str, titulo: str, autores: str, editora: str, edicao: str, ano: str):
         livro = Livro(codigoIdentificador, titulo, autores, editora, edicao, ano)
         self._livros.append(livro)
 
-    def cadastrar_exemplar(self, codigoLivro: int, codigoExemplar: int) -> bool:
+    def cadastrar_exemplar(self, codigoLivro: str, codigoExemplar: str) -> bool:
         livro = self.find_book(codigoLivro)
         if livro:
             livro.cadastrar_exemplar(codigoExemplar)
             return True
         return False
 
-    def cadastrar_usuario(self, codigoIdentificador: int, nome: str, classe:str) -> bool:
+    def cadastrar_usuario(self, codigoIdentificador: str, nome: str, classe:str) -> bool:
         for tipoUsuario in enumUsuarios:
             if tipoUsuario.name == classe:
                 usuario:iUsuario = tipoUsuario.value(nome, codigoIdentificador)
@@ -87,16 +88,16 @@ class Biblioteca:
 
 #Emprestimo, Devolução, Reserva e Inscreve professor à livro
 
-    def emprestar_livro(self, codigoUsuario: int, codigoLivro: int) -> bool:
+    def emprestar_livro(self, codigoUsuario: str, codigoLivro: str) -> dict:
         usuario = self.find_user(codigoUsuario)
         livro = self.find_book(codigoLivro)
 
         if not usuario:
-            Interface.usuario_nao_encontrado()
+            raise ValueError(f'Usuário correspondente ao codigo {codigoUsuario} não encontrado')
             return False
         
         if not livro:
-            Interface.livro_nao_encontrado()
+            raise ValueError(f'Livro correspondente ao codigo {codigoLivro} não encontrado')
             return False
         
         if not usuario.apto_a_emprestimo(livro):
@@ -116,41 +117,41 @@ class Biblioteca:
         self._emprestados.append(emprestimo)
 
         
-        Interface.emprestimo_realizado(emprestimo.dataDeDevolucaoEsperada)
-        return True
+        #Interface.emprestimo_realizado(emprestimo.dataDeDevolucaoEsperada)
+        retorno = {"nomeUsuario": usuario.nome, "nomeLivro": livro.titulo, "dataDeDevolucaoEsperada": emprestimo.dataDeDevolucaoEsperada, "dataDevolucao": None}
+        return retorno
 
     def devolver_livro(self, codigoUsuario, codigoLivro):
         usuario = self.find_user(codigoUsuario)
         livro = self.find_book(codigoLivro)
         if not usuario:
-            Interface.usuario_nao_encontrado()
-            return False
+            raise ValueError(f'Usuário correspondente ao codigo {codigoUsuario} não encontrado')
+            
         
         if not livro:
-            Interface.livro_nao_encontrado()
-            return False
+            raise ValueError(f'Livro correspondente ao codigo {codigoLivro} não encontrado')
+            
         
         emprestimo = usuario.find_emprestimo(livro)
         if not emprestimo:
-            Interface.emprestimo_nao_encontrado()
-            return False
+            raise ValueError(f'Usuário não possui emprestimo do livro correspondente ao codigo {codigoLivro}')
+            
         
         emprestimo.emCurso = False
         emprestimo.dataDeDevolucao = datetime.now().date()
-
-        return True
+        retorno = {"nomeUsuario": usuario.nome, "nomeLivro": livro.titulo, "dataDeDevolucaoEsperada": emprestimo.dataDeDevolucaoEsperada, "dataDevolucao": emprestimo.dataDeDevolucao}
+        return retorno
     
     def reservar_livro(self, codigoUsuario, codigoLivro):
         usuario = self.find_user(codigoUsuario)
         livro = self.find_book(codigoLivro)
 
         if not usuario:
-            Interface.usuario_nao_encontrado()
-            return False
+            raise ValueError(f'Usuário correspondente ao codigo {codigoUsuario} não encontrado')
+            
         
         if not livro:
-            Interface.livro_nao_encontrado()
-            return False
+            raise ValueError(f'Livro correspondente ao codigo {codigoLivro} não encontrado')
         
         if not usuario.apto_a_reserva(livro):
             return False
@@ -159,22 +160,22 @@ class Biblioteca:
         usuario.adiciona_reserva(reserva)
         livro.adiciona_reserva(reserva)
         self._reservas.append(reserva)
-        Interface.reserva_realizada()
-        return True
+        retorno = {"nomeUsuario": usuario.nome, "nomeLivro": livro.titulo, "dataDeDevolucaoEsperada": None, "dataDevolucao": None}
+        return retorno
     
     def inscreve_professor_a_livro(self, codigoUsuario, codigoLivro):
         usuario: None | Professor = self.find_user(codigoUsuario)
         livro:   None | Livro     = self.find_book(codigoLivro)
 
         if not usuario:
-            Interface.usuario_nao_encontrado()
-            return False
+            raise ValueError(f'Usuário correspondente ao codigo {codigoUsuario} não encontrado')
         
         if not livro:
-            Interface.livro_nao_encontrado()
-            return False
+            
+            raise ValueError(f'Livro correspondente ao codigo {codigoLivro} não encontrado')
         
         observador = usuario._observerProfessor
         livro.inscreve_observador_a_livro(observador)
-        return True
+        retorno = {"nomeUsuario": usuario.nome, "nomeLivro": livro.titulo, "dataDeDevolucaoEsperada": None, "dataDevolucao": None}
+        return retorno
     

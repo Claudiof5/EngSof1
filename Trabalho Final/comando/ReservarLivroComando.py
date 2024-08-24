@@ -6,5 +6,5 @@ class ReservarLivroComando(iComando):
         
         def executar(self, parametro: Parametro):
             biblioteca = Biblioteca.get_instance()
-            biblioteca.reservar_livro(parametro.getParametroUm(), parametro.getParametroDois())
-            
+            retorno = biblioteca.reservar_livro(parametro.getParametroUm(), parametro.getParametroDois())
+            return retorno

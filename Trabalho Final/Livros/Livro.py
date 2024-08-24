@@ -7,7 +7,7 @@ from Livros.subject.SubjectNumeroDeReservas import SubjectNumeroDeReservas
 from dataclasses import dataclass
 
 class Livro:
-    def __init__(self, codigoIdentificador: int, titulo: str, autores: List[str], editora: str
+    def __init__(self, codigoIdentificador: str, titulo: str, autores: List[str], editora: str
                  , edicao:int , anoDePublicacao:str)-> None:
         self._codigoIdentificador = codigoIdentificador
         self._titulo = titulo
@@ -102,30 +102,22 @@ class Livro:
 
         return exemplar
     
-    def retorna_informacoes(self) -> None:
+    #dicionário padrão de retorno consulta de livro
+    #dict = {titulo: None, numero_de_reservas: None, nome_dos_reservantes: None, dados_exemplares: None}
+    #dados_exemplares = {codigoExemplar: {disponivel: None, emprestimo: None}}
+    #emprestimo = {nomeUsuario: None, dataEmprestimo: None, dataDeDevolucaoEsperada: None}
+    def retorna_informacoes(self) -> dict:
+        titulo = self.titulo
         numero_de_reservas = self.get_numero_reservas()
-
-        print("Titulo: ", self._titulo)
-        
-        print(f"Quantidade de reservas: {numero_de_reservas}")
-
-        if numero_de_reservas > 0:
-            for reserva in self._reservas:
-                print(f"\t-{reserva.get_nome_usuario()}")
-
-        print("Exemplares")
-        exemplares :List[Exemplar] = self.get_exemplares()
-        existem_exemplares = len(exemplares) > 0
-        if existem_exemplares:
-            for exemplar in exemplares:
-
-                if exemplar.disponivel:
-                    print(f"\t-Codigo Exemplar:{exemplar.codigoExemplar}\n\tStatus: Disponivel\n\t")
-                else:
-                    emprestimo = self.retorna_emprestimo_ativo_por_exemplar(exemplar.codigoExemplar)
-                    if emprestimo:
-                        print(f"\t-Codigo Exemplar:{exemplar.codigoExemplar}\n\tStatus: Emprestado")
-                        print(f"\tUsuario: {emprestimo.nomeUsuario}\n\tData de Emprestimo: {emprestimo.dataEmprestimo} | Data de Devolução Esperada: {emprestimo.dataDeDevolucaoEsperada}\n")  
-
+        nome_dos_reservantes = [reserva.get_nome_usuario() for reserva in self._reservas]
+        dados_exemplares = {}
+        for exemplar in self._exemplares:
+            if exemplar.disponivel:
+                dados_exemplares[exemplar.codigoExemplar] = {"disponivel": exemplar.disponivel, "emprestimo":{}}
+            else:
+                emprestimo = self.retorna_emprestimo_ativo_por_exemplar(exemplar.codigoExemplar)
+                dados_exemplares[exemplar.codigoExemplar] = {"disponivel": exemplar.disponivel, "emprestimo": {"nomeUsuario": emprestimo.nomeUsuario, "dataEmprestimo": emprestimo.dataEmprestimo, "dataDeDevolucaoEsperada": emprestimo.dataDeDevolucaoEsperada}}
+        retorno = {"titulo": titulo, "numero_de_reservas": numero_de_reservas, "dados_exemplares": dados_exemplares, "nome_dos_reservantes": nome_dos_reservantes}
+        return retorno
     def inscreve_observador_a_livro(self, observer: SubjectNumeroDeReservas) -> None:
         self.subject_numero_reservas.attach(observer)

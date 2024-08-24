@@ -6,5 +6,6 @@ class ConsultarLivroComando(iComando):
         
         def executar(self, parametro: Parametro):
             biblioteca = Biblioteca.get_instance()
-            biblioteca.retorna_informacoes_livro(parametro.getParametroUm())
+            retorno = biblioteca.retorna_informacoes_livro(parametro.getParametroUm())
+            return retorno
             

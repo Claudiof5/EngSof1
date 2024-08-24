@@ -96,36 +96,25 @@ class iUsuario(ABC):
     def emprestimos_concluidos(self) -> List[Emprestimo]:
         return [ emprestimo for emprestimo in self._emprestimos if not emprestimo.emCurso]
 
-    def print_informacoes(self) ->None:
-        reservas = self._reservas
-        emprestimosEmCurso = self.emprestimos_ativos()
-        emprestimosAtrasados = self.emprestimos_atrasados()
-        emprestimosConcluidos = self.emprestimos_concluidos()
+    #formato dicionário padrão de retorno consulta de usuario
+    #dict = {nome: str, em_debito: bool, reservas: List[reservas], emprestimos:List[emprestimos], notificacoes:int}
+    #reservas = {titulo: str, data: str}
+    #emprestimos = {titulo: str, dataEmprestimo: str, dataDeDevolucaoEsperada: str, dataDevolucao: str, status: str}
+    def retorna_informacoes(self) ->dict:
+        nome = self._nome
+        em_debito = self.esta_em_debito()
+        reservas = [{'titulo': reserva.livro.titulo, 'dataReserva': reserva.dataReserva} for reserva in self._reservas]
+        emprestimos = []
+        for emprestimo in self._emprestimos:
+            if emprestimo.emCurso:
+                if datetime.now().date() > emprestimo.dataDeDevolucaoEsperada:
+                    status = "Em Atraso"
+                else:
+                    status = "Em Curso"
+            else:
+                status = "Finalizado"
+            emprestimo = {'titulo': emprestimo.titulo, 'dataEmprestimo': emprestimo.dataEmprestimo, 'dataDeDevolucaoEsperada': emprestimo.dataDeDevolucaoEsperada, 'dataDeDevolucao': emprestimo.dataDeDevolucao, 'status': status}
         
-        print("Nome: ", self._nome)
-        print("Está em débito: ", self.esta_em_debito())
-        
-        if reservas:
-            print("Reservas: ")
-            for reserva in reservas:
-                reserva.print_reserva()
-        else:
-            print("Sem reservas\n")
-
-        if emprestimosEmCurso:
-            print("Empréstimos em curso: ")
-            for emprestimo in emprestimosEmCurso:
-                emprestimo.print_emprestimo()
-        
-        if emprestimosAtrasados:
-            print("Empréstimos atrasados: ")
-            for emprestimo in emprestimosAtrasados:
-                emprestimo.print_emprestimo()
-        else:
-            print("Sem empréstimos atrasados\n")
-        
-        if emprestimosConcluidos:
-            print("Empréstimos concluidos: ")
-            for emprestimo in emprestimosConcluidos:
-                emprestimo.print_emprestimo()
+        retorno = {"nome": nome, "em_debito": em_debito, "reservas": reservas, "emprestimos": emprestimos}
+        return retorno
         
