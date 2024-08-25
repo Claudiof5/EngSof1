@@ -123,11 +123,11 @@ class Interface:
     #dict = {nome: str, em_debito: bool, reservas: List[reservas], emprestimos:List[emprestimos], numero_notificacoes:int}
     #reservas = {titulo: str, data: str}
     #emprestimos = {titulo: str, dataEmprestimo: str, dataDeDevolucaoEsperada: str, dataDevolucao: str, status: str}
-    def mensagem_consulta_de_usuario(self, nome, em_debito, reservas, emprestimos, **kwargs):
+    def mensagem_consulta_de_usuario(self, nome, em_debito, reservas :dict, emprestimos :dict, **kwargs):
         emprestimosEmCurso = []
         emprestimosAtrasados = []
         emprestimosConcluidos = []
-        for emprestimo in emprestimos:
+        for emprestimo in emprestimos.values():
             if emprestimo["status"] == "Em Curso":
                 emprestimosEmCurso.append(emprestimo)
             elif emprestimo["status"] == "Em Atraso":    
@@ -144,7 +144,7 @@ class Interface:
 
         if reservas:
             print("Reservas: ")
-            for reserva in reservas:
+            for reserva in reservas.values():
                 print(f"Livro: {reserva['titulo']} Data: {reserva['dataReserva']}")
         else:
             print("Sem reservas\n")

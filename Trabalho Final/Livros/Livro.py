@@ -109,15 +109,29 @@ class Livro:
     def retorna_informacoes(self) -> dict:
         titulo = self.titulo
         numero_de_reservas = self.get_numero_reservas()
-        nome_dos_reservantes = [reserva.get_nome_usuario() for reserva in self._reservas]
-        dados_exemplares = {}
-        for exemplar in self._exemplares:
-            if exemplar.disponivel:
-                dados_exemplares[exemplar.codigoExemplar] = {"disponivel": exemplar.disponivel, "emprestimo":{}}
-            else:
-                emprestimo = self.retorna_emprestimo_ativo_por_exemplar(exemplar.codigoExemplar)
-                dados_exemplares[exemplar.codigoExemplar] = {"disponivel": exemplar.disponivel, "emprestimo": {"nomeUsuario": emprestimo.nomeUsuario, "dataEmprestimo": emprestimo.dataEmprestimo, "dataDeDevolucaoEsperada": emprestimo.dataDeDevolucaoEsperada}}
+        nome_dos_reservantes = [reserva.nome_usuario for reserva in self._reservas]
+        dados_exemplares = self.get_informacoes_exemplares()
+
         retorno = {"titulo": titulo, "numero_de_reservas": numero_de_reservas, "dados_exemplares": dados_exemplares, "nome_dos_reservantes": nome_dos_reservantes}
         return retorno
+    
+    def get_informacoes_exemplares(self) -> dict:
+        exemplares = { exemplar.get_codigo_exemplar():exemplar.get_informacoes_exemplar() for exemplar in self._exemplares}
+        exemplares = {  codigoExemplar:(informacoesExemplar | self.retorna_emprestimo_de_dado_exemplar(codigoExemplar) )for codigoExemplar, informacoesExemplar in exemplares.items()}
+        return exemplares
+    
+    def get_informacoes_emprestimos(self) -> dict:
+        emprestimos = {emprestimo.codigoExemplar :emprestimo.get_informacoes_emprestimo() for emprestimo in self._emprestimos}
+        return emprestimos
+    
+    def retorna_emprestimo_de_dado_exemplar(self, codigoExemplar: str) -> dict:
+        
+        emprestimos:dict = self.get_informacoes_emprestimos()
+        if codigoExemplar in emprestimos.keys():
+            emprestimoReferenteADadoExemplar = emprestimos[codigoExemplar]
+            return {"emprestimo":emprestimoReferenteADadoExemplar}
+        return {"emprestimo":{}}
+    
+        
     def inscreve_observador_a_livro(self, observer: SubjectNumeroDeReservas) -> None:
         self.subject_numero_reservas.attach(observer)

@@ -42,7 +42,7 @@ class Biblioteca:
 
 #Retorna Informações Usuario, Livro e Notificações professor
 
-    def retorna_informacoes_usuarios(self, codigoUsuario: int):
+    def retorna_informacoes_usuario(self, codigoUsuario: int):
         usuario = self.find_user(codigoUsuario)
         if usuario:
             return usuario.retorna_informacoes()

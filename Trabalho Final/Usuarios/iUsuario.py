@@ -103,18 +103,14 @@ class iUsuario(ABC):
     def retorna_informacoes(self) ->dict:
         nome = self._nome
         em_debito = self.esta_em_debito()
-        reservas = [{'titulo': reserva.livro.titulo, 'dataReserva': reserva.dataReserva} for reserva in self._reservas]
-        emprestimos = []
-        for emprestimo in self._emprestimos:
-            if emprestimo.emCurso:
-                if datetime.now().date() > emprestimo.dataDeDevolucaoEsperada:
-                    status = "Em Atraso"
-                else:
-                    status = "Em Curso"
-            else:
-                status = "Finalizado"
-            emprestimo = {'titulo': emprestimo.titulo, 'dataEmprestimo': emprestimo.dataEmprestimo, 'dataDeDevolucaoEsperada': emprestimo.dataDeDevolucaoEsperada, 'dataDeDevolucao': emprestimo.dataDeDevolucao, 'status': status}
+        reservas = self.retorna_informacoes_reservas()
+        emprestimos = self.retorna_informacoes_emprestimos()
         
         retorno = {"nome": nome, "em_debito": em_debito, "reservas": reservas, "emprestimos": emprestimos}
         return retorno
         
+    def retorna_informacoes_reservas(self) -> List[dict]:
+        return {reserva.codigo_identificador_livro: reserva.get_informacoes_reserva() for reserva in self._reservas}
+    
+    def retorna_informacoes_emprestimos(self) -> List[dict]:
+        return {emprestimo.codigoExemplar:emprestimo.get_informacoes_emprestimo() for emprestimo in self._emprestimos}

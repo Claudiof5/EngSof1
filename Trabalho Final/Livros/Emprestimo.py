@@ -25,3 +25,18 @@ class Emprestimo:
     @property
     def titulo(self) -> str:
         return self.exemplar.get_livro().titulo
+    
+    def get_informacoes_emprestimo(self) -> dict[str, str]:
+
+        status = self.get_status()
+        return {'nomeUsuario':self.nomeUsuario, 'titulo': self.titulo, 'dataEmprestimo': self.dataEmprestimo, 
+                'dataDeDevolucaoEsperada': self.dataDeDevolucaoEsperada,'dataDeDevolucao': self.dataDeDevolucao, 'status': status}
+    
+    def get_status(self) -> str:
+        if self.emCurso:
+            if datetime.now().date() > self.dataDeDevolucaoEsperada:
+                return "Em Atraso"
+            else:
+                return "Em Curso"
+        else:
+            return "Finalizado"

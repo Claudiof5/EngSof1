@@ -9,6 +9,12 @@ class Exemplar:
         self.codigoExemplar: int = codigoExemplar
         self.disponivel: bool = True
 
+    
     def get_livro(self) -> str:
         return self.livro
     
+    def get_codigo_exemplar(self) -> int:
+        return self.codigoExemplar
+
+    def get_informacoes_exemplar(self) -> dict[str, str]:
+        return {'disponivel': self.disponivel}

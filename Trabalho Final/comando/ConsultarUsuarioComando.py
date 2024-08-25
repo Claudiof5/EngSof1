@@ -6,7 +6,7 @@ class ConsultarUsuarioComando(iComando):
         
         def executar(self, parametro: Parametro):
             biblioteca = Biblioteca.get_instance()
-            retorno = biblioteca.retorna_informacoes_usuarios(parametro.getParametroUm())
+            retorno = biblioteca.retorna_informacoes_usuario(parametro.getParametroUm())
 
             return retorno
             

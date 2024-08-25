@@ -10,10 +10,18 @@ class Reserva:
         self.livro = livro
         self.usuario = usuario
         self.dataReserva = datetime.now().date()
-        
-    def get_nome_usuario(self) -> str:
+    
+    @property
+    def titulo_livro(self) -> str:
+        return self.livro.titulo
+    
+    @property
+    def nome_usuario(self) -> str:
         return self.usuario.nome
     
-    def get_codigoIdentificador_livro(self) -> str:
+    @property
+    def codigo_identificador_livro(self) -> str:
         return self.livro.codigoIdentificador
     
+    def get_informacoes_reserva(self) -> dict[str, str]:
+        return {'titulo': self.titulo_livro, 'dataReserva': self.dataReserva}
