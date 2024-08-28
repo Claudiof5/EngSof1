@@ -16,12 +16,8 @@ class iUsuario(ABC):
         self._codigoIdentificador = codigoIdentificador
         self._emprestimos :List[Emprestimo] = []
         self._reservas :List[Reserva] = []
-        self._regrasDeEmprestimo:iRegrasEmprestimo
+        self._regrasDeEmprestimo: iRegrasEmprestimo
         self._regrasDeReserva: iRegrasReserva
-    
-    def reservar_livro(self, livro) -> None:
-        pass
-    
 
     def apto_a_emprestimo(self, livro :Livro ) -> bool:
         return self._regrasDeEmprestimo.apto_a_emprestimo( livro, self)

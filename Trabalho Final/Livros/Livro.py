@@ -3,12 +3,11 @@ from Livros.Reserva import Reserva
 from Livros.Emprestimo import Emprestimo
 from Livros.Exemplar import Exemplar
 from Livros.subject.SubjectNumeroDeReservas import SubjectNumeroDeReservas
-from Livros.subject.SubjectNumeroDeReservas import SubjectNumeroDeReservas
 from dataclasses import dataclass
 
 class Livro:
     def __init__(self, codigoIdentificador: str, titulo: str, autores: List[str], editora: str
-                 , edicao:int , anoDePublicacao:str)-> None:
+                 , edicao:str , anoDePublicacao:str)-> None:
         self._codigoIdentificador = codigoIdentificador
         self._titulo = titulo
         self._autores = autores

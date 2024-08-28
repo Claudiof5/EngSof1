@@ -1,13 +1,13 @@
 from dataclasses import dataclass
 
 from datetime import datetime
-#from iUsuario import iUsuario
+from Usuarios.iUsuario import iUsuario
 #from Livro import Livro
 
 class Reserva:
     
     def __init__(self, livro , usuario) -> None:
-        self.livro = livro
+        self.livro = livro  
         self.usuario = usuario
         self.dataReserva = datetime.now().date()
     
