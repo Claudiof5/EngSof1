@@ -6,7 +6,11 @@ class ConsultarUsuarioComando(iComando):
         
         def executar(self, parametro: Parametro):
             biblioteca = Biblioteca.get_instance()
-            retorno = biblioteca.retorna_informacoes_usuario(parametro.getParametroUm())
+            codigoUsuario = parametro.getParametroUm()
+            
+            usuario = biblioteca.find_user(codigoUsuario)
+            if not usuario:
+                raise ValueError(f'Usuário correspondente ao codigo {codigoUsuario} não encontrado')
+            return usuario.retorna_informacoes()
 
-            return retorno
             

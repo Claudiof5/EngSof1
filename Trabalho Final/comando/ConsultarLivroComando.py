@@ -5,7 +5,11 @@ from Biblioteca import Biblioteca
 class ConsultarLivroComando(iComando):
         
         def executar(self, parametro: Parametro):
-            biblioteca = Biblioteca.get_instance()
-            retorno = biblioteca.retorna_informacoes_livro(parametro.getParametroUm())
-            return retorno
             
+            biblioteca = Biblioteca.get_instance()
+            codigoLivro = parametro.getParametroUm()
+            livro = biblioteca.find_book(codigoLivro)
+
+            if not livro:
+                raise ValueError(f'Livro correspondente ao codigo {codigoLivro} não encontrado')
+            return livro.retorna_informacoes()
