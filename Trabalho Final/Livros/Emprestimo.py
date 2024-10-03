@@ -1,20 +1,23 @@
 from dataclasses import dataclass
-from Livros.Exemplar import Exemplar
-#from iUsuario import iUsuario
 from datetime import datetime, timedelta
 
+from Livros.Exemplar import Exemplar
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from Usuarios.iUsuario import iUsuario
+    from Livros.Livro import Livro
 class Emprestimo:
 
-    def __init__(self, exemplar: Exemplar, usuario) -> None:
-        self.exemplar = exemplar
-        self.usuario = usuario
+    def __init__(self, exemplar: Exemplar, usuario: 'iUsuario') -> None:
+        self.exemplar: Exemplar = exemplar
+        self.usuario: 'iUsuario' = usuario
         self.dataEmprestimo = datetime.now().date()
         self.dataDeDevolucaoEsperada = self.dataEmprestimo + timedelta(usuario.diasDeEmprestimoMaximo )
         self.dataDeDevolucao = None
         self.emCurso = True
 
     @property
-    def livro(self) -> str:
+    def livro(self) -> 'Livro':
         return self.exemplar.get_livro()
     @property
     def nomeUsuario(self) -> str:

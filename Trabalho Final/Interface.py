@@ -84,7 +84,7 @@ class Interface:
         print(f"Devolução do livro '{nomeLivro}' realizada com sucesso pelo usuário {nomeUsuario} em {dataDevolucao} \n")
 
     def mensagem_reserva_realizada(self, nomeUsuario, nomeLivro, **kwargs):
-        print(f"Reserva do livro '{nomeLivro}' realizada com sucesso pelo usuário{nomeUsuario}\n")
+        print(f"Reserva do livro '{nomeLivro}' realizada com sucesso pelo usuário {nomeUsuario}\n")
 
     def mensagem_inscricao_realizada(self, nomeUsuario, nomeLivro, **kwargs):
         print(f"Inscrição do usuário {nomeUsuario} no livro '{nomeLivro}' realizada com sucesso. O mesmo será notificado quando o limite de reservas for passado\n")
@@ -117,7 +117,7 @@ class Interface:
                     emprestimo = dadosExemplar["emprestimo"]
                     if emprestimo:
                         print(f"\t-Codigo Exemplar: {codigoExemplar}\n\tStatus: Emprestado")
-                        print(f"\tUsuario: {emprestimo["nomeUsuario"]}\n\tData de Emprestimo: {emprestimo["dataEmprestimo"]} | Data de Devolução Esperada: {emprestimo["dataDeDevolucaoEsperada"]}\n")
+                        print(f"\tUsuario: {emprestimo['nomeUsuario']}\n\tData de Emprestimo: {emprestimo['dataEmprestimo']} | Data de Devolução Esperada: {emprestimo['dataDeDevolucaoEsperada']}\n")
 
     #formato dicionário padrão de retorno consulta de usuario
     #dict = {nome: str, em_debito: bool, reservas: List[reservas], emprestimos:List[emprestimos], numero_notificacoes:int}

@@ -1,9 +1,12 @@
 from Usuarios.regrasEmprestimo.iRegrasEmprestimo import *
-#from Interface import Interface
 
-class RegrasEmprestimoAlunoPosGraduacao(iRegrasEmprestimo):
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from Usuarios.iAluno import iAluno
 
-    def apto_a_emprestimo(self, livro :Livro, user  ) -> bool:
+class RegrasEmprestimoAluno(iRegrasEmprestimo):
+
+    def apto_a_emprestimo(self, livro: Livro, user: 'iAluno'  ) -> bool:
         numeroExemplaresDisponiveis = livro.get_numero_exemplares_disponiveis()
         semExemplaresDisponiveis = numeroExemplaresDisponiveis == 0
         existeReserva = user.find_reserva(livro)

@@ -24,6 +24,5 @@ class ReservarLivroComando(iComando):
                 reserva = Reserva(livro, usuario)
                 usuario.adiciona_reserva(reserva)
                 livro.adiciona_reserva(reserva)
-                biblioteca._reservas.append(reserva)
                 retorno = {"nomeUsuario": usuario.nome, "nomeLivro": livro.titulo, "dataDeDevolucaoEsperada": None, "dataDevolucao": None}
                 return retorno

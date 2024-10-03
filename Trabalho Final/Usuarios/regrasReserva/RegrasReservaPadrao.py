@@ -1,10 +1,14 @@
 from Usuarios.regrasReserva.iRegrasReserva import *
 
-#from Interface import Interface
+
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from Usuarios.iUsuario import iUsuario
+    from Livros.Livro import Livro
 
 class RegrasReservaPadrao(iRegrasReserva):
     
-    def apto_a_reserva(self, livro, user) -> bool:
+    def apto_a_reserva(self, livro: 'Livro', user: 'iUsuario') -> bool:
         
         possui_reserva_ativa_mesmo_livro = user.find_reserva(livro) != None
         possui_exemplar_emprestado_do_mesmo_livro = user.find_emprestimo(livro) != None

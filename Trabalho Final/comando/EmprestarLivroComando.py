@@ -31,7 +31,6 @@ class EmprestarLivroComando(iComando):
 
                 usuario.adiciona_emprestimo(emprestimo)
                 livro.adiciona_emprestimo(emprestimo)
-                biblioteca._emprestados.append(emprestimo)
 
                 
                 #Interface.emprestimo_realizado(emprestimo.dataDeDevolucaoEsperada)

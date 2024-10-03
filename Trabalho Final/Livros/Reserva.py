@@ -1,14 +1,16 @@
 from dataclasses import dataclass
-
 from datetime import datetime
-from Usuarios.iUsuario import iUsuario
-#from Livro import Livro
 
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from Livros.Livro import Livro  
+    from Usuarios.iUsuario import iUsuario
+    
 class Reserva:
     
-    def __init__(self, livro , usuario) -> None:
-        self.livro = livro  
-        self.usuario = usuario
+    def __init__(self, livro: 'Livro', usuario: 'iUsuario') -> None:
+        self.livro: 'Livro' = livro  
+        self.usuario: 'iUsuario' = usuario
         self.dataReserva = datetime.now().date()
     
     @property
